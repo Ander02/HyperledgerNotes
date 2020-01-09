@@ -29,6 +29,7 @@ Has Three Type of Nodes ina Hyperledger Network
 - Peers
     - Leader Peer
     - Anchor Peer
+    - Regular Peer
 - Client
 
 Orderes
@@ -47,3 +48,43 @@ Orderes
             - Single point of failure
         - Kafka
             - Clustering for high throughput, scalability & fault tolerance
+
+Peers
+- Has and maintains its own copy of the ledger
+    - Your ledger has a Transaction Log and State 
+        - The Transaction Log is Immutable
+            - Ever a transaction is registered, cannot be deleted or updated anymore
+        - The Transaction Log use LevelDB to store data
+        - The State can use LevelDB or CouchDB to store data
+        - In the state database is possible run complex queries througth chaincode
+- Each Peer expose services
+    - This services can be accessed by CLients, Orderes, and Another Peers
+    - GRPC and Gossip Protocol expose the services and make the communication
+- The Anchor Peers, are Discoverable
+    - Each Organization MUST have at least one anchor peer
+- The Leader Peers receive blocks from Orderes
+    - Leadership is at channel level
+    - May be statically assigned or dynamically assigned how leader
+
+Client
+- Act on end user side
+- Are builded with Go or Node SDK
+- Create Transaction Requests and submits to the network
+
+Channels
+- How to grants privacity on the network
+- Transaction are isolated within the channel
+- Chaincode is deployed at a channel and NOT in the Network
+- Exists a Special Channel: Ordering System Channel or Bootstrap Channel
+    - Is created on network initialization automatically
+- Organizations and Peers may join in multiple channels, and each channel has your own distribuited ledger and state dabase
+
+Public Key Infraestructure
+- Identity Management in the hyperledgher flow the typical process for identity management
+    0. User -> Register in a Registration Authoriry and Generate a Certificate in a Certification Authority
+    0. User Receive the certificate
+    0. Whenever a user use the certificate, it is validated by a Validation Authority
+- In the hyperledger the Certification Authority is implemented by CA Server, with contains
+    - Identity Registration
+    - Identity Enrollment
+    - Certificate Management
