@@ -59,19 +59,19 @@ _All the components require configuration information proviced in a .yaml file_
 ## How to Install
 
 Docker
-~~~
+~~~Bash
 sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ~~~
 
 Vangrat
-~~~
+~~~Bash
 sudo apt-get vangrat
 ~~~
 
 GO
-~~~
+~~~Bash
 Download from https://golang.org/dl/
 
 tar -C /usr/local -xzf go1.13.6.linux-amd64.tar.gz
@@ -79,3 +79,70 @@ tar -C /usr/local -xzf go1.13.6.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 ~~~
 
+Hyperledger Fabric
+~~~Bash
+curl -sSL http://bit.ly/2ysbOFE -o bootstrap.sh
+
+chmod 755 ./bootstrap.sh
+
+bash  ./bootstrap.sh  1.4.2 1.4.2 
+
+echo "======= Copying the binaries to /usr/local/bin===="
+
+mkdir -p  bin
+
+cp fabric-samples/bin/*    /usr/local/bin
+cp fabric-samples/bin/*    bin
+rm -rf fabric-samples/bin
+
+- The sample chaincode is under the subfolder go and need to come under gopath/src subfolder
+
+echo "======= Setting up the GOPATH folder $GOPATH ===="
+mkdir -p $GOPATH/src
+cp -r fabric-samples/chaincode/*    $GOPATH/src
+cp $GOPATH/src/chaincode_example02/go/chaincode_example02.go $GOPATH/src/chaincode_example02
+
+echo "======= Setting up the Node chaincode folder ==="
+mkdir -p $GOPATH/../nodechaincode/chaincode_example02
+cp -r fabric-samples/chaincode/chaincode_example02/node/*    $GOPATH/../nodechaincode/chaincode_example02
+
+- This downloads the shim code 
+echo "======= Setting up the HLF Shim (Takes time  - Get a Coffee :)===="
+go get -v -u github.com/hyperledger/fabric-chaincode-go/shim
+
+~~~
+
+CA Server
+~~~Bash
+export PATH=$PATH:$GOROOT/bin
+
+- Sets up the fabric-ca-server & fabric-ca-client
+echo "=====Installing libtool library"
+sudo apt install -y libtool libltdl-dev
+
+
+echo "=====Getting fabric ca "
+- Document process leads to errors as it leads to pulling of master branch
+go get -u github.com/hyperledger/fabric-ca/cmd/...
+
+/*
+git clone --branch release-1.3 https://github.com/hyperledger/fabric-ca.git
+rm -rf $GOPATH/src/github.com/hyperledger/fabric-ca 2> /dev/null
+mv fabric-ca  $GOPATH/src/github.com/hyperledger
+go install github.com/hyperledger/fabric-ca/cmd/...
+*/
+
+echo "=====Copying fabric ca binaries"
+sudo cp $GOPATH/bin/*    /usr/local/bin
+
+sudo cp $GOPATH/bin/*    $PWD/../bin
+
+sudo rm $GOPATH/bin/* 
+
+echo "Done."
+~~~
+
+Jq
+~~~Bash
+sudo apt-get install -y jq
+~~~
