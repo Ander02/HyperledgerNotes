@@ -3,7 +3,7 @@
 ## Hyperledger Fabric Software
 
 - Dependencies
-    - GoLand
+    - GoLang
         - The main code of hyperledger implementation is in GoLang
     - Docker and Docker Compose
         - Use by deploy the chaincode in isolated docker containers
@@ -55,4 +55,27 @@ _All the components require configuration information proviced in a .yaml file_
         - Expose as services for manager identity and certifications
 - fabric-ca-client
     - Command line tool for managing identities on CA Server
+
+## How to Install
+
+Docker
+~~~
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+~~~
+
+Vangrat
+~~~
+sudo apt-get vangrat
+~~~
+
+GO
+~~~
+Download from https://golang.org/dl/
+
+tar -C /usr/local -xzf go1.13.6.linux-amd64.tar.gz
+
+export PATH=$PATH:/usr/local/go/bin
+~~~
 
