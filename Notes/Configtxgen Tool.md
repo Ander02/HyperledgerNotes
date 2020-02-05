@@ -451,3 +451,8 @@ Profiles:
             Organizations:
                 - *SampleOrg
 ~~~
+
+## Genesis Block
+
+- The genesis block is the first blockcin the blockchain and is used for launching the Orderer
+
